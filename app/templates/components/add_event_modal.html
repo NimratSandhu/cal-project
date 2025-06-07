@@ -1,0 +1,43 @@
+<div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form 
+        hx-post="/add_event" 
+        hx-target="#calendar" 
+        hx-swap="none"  <!-- Just refreshes calendar from endpoint -->
+        onsubmit="bootstrap.Modal.getInstance(document.getElementById('addEventModal')).hide(); setTimeout(()=>location.reload(), 300); return true;"
+      >
+        <div class="modal-header">
+          <h5 class="modal-title" id="addEventModalLabel">Add Event</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" name="name" class="form-control" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea name="description" class="form-control"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Start Time</label>
+            <input type="datetime-local" name="start-time" class="form-control" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">End Time</label>
+            <input type="datetime-local" name="end-time" class="form-control" required>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Add Event</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
