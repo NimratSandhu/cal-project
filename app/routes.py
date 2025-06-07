@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, jsonify
 from .models import Event
 from . import db
 
@@ -33,3 +33,20 @@ def add_event():
 def get_events():
     events = Event.query.order_by(Event.start_time).all()
     return render_template("events_list.html", events=events)
+
+@main.route("/get_events_json")
+def get_events_json():
+    events = Event.query.all()
+    event_list = []
+
+    for event in events:
+        event_list.append({
+            "title": event.name,
+            "start": event.start_time.isoformat() if event.start_time else "",
+            "end": event.end_time.isoformat() if event.end_time else "",
+            "description": event.description,
+        })
+
+    print(event_list)
+
+    return jsonify(event_list)
