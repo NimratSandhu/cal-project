@@ -16,8 +16,46 @@
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay'
           },
+          timeZone: 'local',
+          editable: true,
+          eventResizableFromStart: true,
+
+          eventClick: function(info) {
+              // On click → show alert (or modal)
+              alert(`Event: ${info.event.title}\nDescription: ${info.event.extendedProps.description}`);
+          },
+
+          eventDrop: function(info) {
+              // Drag & drop → send update to backend
+              updateEvent(info.event);
+          },
+
+          eventResize: function(info) {
+              // Resize → send update to backend
+              updateEvent(info.event);
+          },
           events: '/get_events_json'  // Flask endpoint to load events
         });
+
+        function updateEvent(event) {
+            console.log("Updating event:", event);
+            fetch("/update_event", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id: event.id,
+                    start: event.start.toISOString(),
+                    end: event.end ? event.end.toISOString() : null
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    alert("Failed to update event!");
+                }
+            });
+        }
 
         calendar.render();
       });
